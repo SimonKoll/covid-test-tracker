@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -18,6 +19,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
+import java.util.logging.Logger
 
 /**
  * A simple [Fragment] subclass.
@@ -34,7 +36,7 @@ class NewReport : Fragment() {
     var time: LocalTime = LocalTime.now()
 
     private lateinit var binding: FragmentNewReportBinding
-
+    private var idUnique: Boolean = true;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -54,10 +56,8 @@ class NewReport : Fragment() {
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, offices)
         binding.dropdownPlace.setAdapter(arrayAdapter)
 
-        binding.btSave.setOnClickListener {
-            validate(it)
+        setListener()
 
-        }
 
         binding.etDatePicker.setOnClickListener { view ->
             showDatePickerDialog(view)
@@ -115,16 +115,9 @@ class NewReport : Fragment() {
         datePickerDialog!!.show()
     }
 
-    private fun validate(view: View?){
-        coronaReportAppModel.reportList.value?.forEach {
-            if (it.id == binding.etInputId.text.toString()) {
-                binding.etInputId.setText("")
-            }
-
-        }
+    private fun validate(view: View?) {
         val report: Report = Report(
             binding.etInputId.text.toString(),
-            //TODO: Monat muss noch richtig gesetzt werden
             LocalDateTime.of(date, time),
             binding.switchInputPositiv.isChecked,
             binding.dropdownPlace.text.toString()
@@ -134,4 +127,26 @@ class NewReport : Fragment() {
 
     }
 
+    private fun setListener() {
+        binding.btSave.setOnClickListener {
+            coronaReportAppModel.reportList.value?.forEach {
+                if (binding.etInputId.text.toString() == it.id) {
+                    idUnique = false
+                    binding.etInputId.text.clear()
+                 } else if (binding.etInputId.text.toString() == "") {
+                    idUnique = false
+                }
+            }
+            if (idUnique) {
+                validate(it)
+            }
+            else {
+                idUnique = true
+                setListener()
+                Logger.getLogger("warnung").warning("id entweder nicht eindeutig oder leer")
+            }
+        }
+    }
 }
+
+
