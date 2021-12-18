@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/welcomeFragment">
+
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="at.htl.leonding.coronatesttracker.WelcomeFragment"
+        android:label="fragment_welcome"
+        tools:layout="@layout/fragment_welcome" >
+        <action
+            android:id="@+id/action_welcomeFragment_to_newReport"
+            app:destination="@id/newReport"
+            app:enterAnim="@anim/nav_default_enter_anim" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_reportList"
+            app:destination="@id/reportList" />
+    </fragment>
+    <fragment
+        android:id="@+id/newReport"
+        android:name="at.htl.leonding.coronatesttracker.NewReport"
+        android:label="fragment_new_report"
+        tools:layout="@layout/fragment_new_report" >
+        <action
+            android:id="@+id/action_newReport_to_reportList"
+            app:destination="@id/reportList" />
+    </fragment>
+    <fragment
+        android:id="@+id/reportList"
+        android:name="at.htl.leonding.coronatesttracker.ReportList"
+        android:label="fragment_report_list"
+        tools:layout="@layout/fragment_report_list" >
+        <action
+            android:id="@+id/action_reportList_to_welcomeFragment"
+            app:destination="@id/welcomeFragment" />
+        <action
+            android:id="@+id/action_reportList_to_newReport"
+            app:destination="@id/newReport" />
+    </fragment>
+</navigation>

@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">CoronaTestTracker</string>
+    <string name="id">id</string>
+    <string name="positive">positive</string>
+    <string name="time">time</string>
+    <string name="date">date</string>
+    <string name="offices">Offices</string>
+    <string name="office1">Linz-Stadtplatz</string>
+    <string name="office2">Leonding-Meixnerkreuzung</string>
+    <string name="office3">Parkplatz-Haidcenter</string>
+    <string name="btsave">speichern</string>
+    <string name="title">Corona Test Tracker</string>
+    <string name="create_new_report">create new report</string>
+    <string name="view_report_list">durchgeführte Tests</string>
+    <!-- TODO: Remove or change this placeholder text -->
+
+    <string-array name="offices">
+        <item>Linz-Stadtplatz</item>
+        <item>Leonding-Meixnerkreuzung</item>
+        <item>Parkplatz-Haidcenter</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="btHome">Tagesübersicht</string>
+    <string name="defaultDateText">JAN 01 2021</string>
+    <string name="titleReportList">Liste der durchgeführten Testungen</string>
+    <string name="test">test</string>
+    <string name="neute_testung_eingeben">Neute Testung eingeben</string>
+    <string name="exampleText1">Maskierte ID;YYYY-MM-DD;HH:mm;Ergebnis;Standort</string>
+    <string name="exampleText2">OÖ045022314589;2021–12-1118:45;positiv;Leonding-Meixnerkreuzung</string>
+    <string name="anzahl">anzahl</string>
+    <string name="positiv_negativ">Positiv/Negativ</string>
+</resources>
