@@ -3,12 +3,12 @@ package at.htl.leonding.coronatesttracker
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import at.htl.leonding.coronatesttracker.Model.CoronaReportAppModel
@@ -55,15 +55,8 @@ class NewReport : Fragment() {
         binding.dropdownPlace.setAdapter(arrayAdapter)
 
         binding.btSave.setOnClickListener {
-            val report: Report = Report(
-                binding.etInputId.text.toString(),
-                //TODO: Monat muss noch richtig gesetzt werden
-                LocalDateTime.of(date, time),
-                binding.switchInputPositiv.isChecked,
-                binding.dropdownPlace.text.toString()
-            )
-            coronaReportAppModel.addReport(report)
-            it.findNavController().navigate(R.id.action_newReport_to_reportList)
+            validate(it)
+
         }
 
         binding.etDatePicker.setOnClickListener { view ->
@@ -122,5 +115,23 @@ class NewReport : Fragment() {
         datePickerDialog!!.show()
     }
 
+    private fun validate(view: View?){
+        coronaReportAppModel.reportList.value?.forEach {
+            if (it.id == binding.etInputId.text.toString()) {
+                binding.etInputId.setText("")
+            }
+
+        }
+        val report: Report = Report(
+            binding.etInputId.text.toString(),
+            //TODO: Monat muss noch richtig gesetzt werden
+            LocalDateTime.of(date, time),
+            binding.switchInputPositiv.isChecked,
+            binding.dropdownPlace.text.toString()
+        )
+        coronaReportAppModel.addReport(report)
+        view?.findNavController()?.navigate(R.id.action_newReport_to_reportList)
+
+    }
 
 }
