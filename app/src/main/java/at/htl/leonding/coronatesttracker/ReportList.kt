@@ -41,11 +41,18 @@ class ReportList : Fragment() {
         }
 
         val stringBuilder = StringBuilder()
+        var id = ""
         coronaReportAppModel.reportList.value?.forEach {
+            if(it.id.length <=5){
+               id = "OÖ1234"
+            }
+            else{
+                id=it.id
+            }
             stringBuilder.append(
                 String.format(
                     "%s\n      %s\n      %s\n      %s\n\n",
-                    "ID: " + it.id,
+                    "ID: " + id.substring(0,2) + "..."+ id.substring(id.length-4,id.length ),
                     "Datum und Uhrzeit: " + it.dateAndTime.toLocalDate() + " / " + it.dateAndTime.toLocalTime(),
                     "Ergebnis: " + convertPositive(it.isPositive),
                     "Testort: " + it.office

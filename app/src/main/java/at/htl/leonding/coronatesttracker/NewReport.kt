@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Button
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -21,11 +20,7 @@ import java.time.LocalTime
 import java.util.*
 import java.util.logging.Logger
 
-/**
- * A simple [Fragment] subclass.
- * Use the [NewReport.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class NewReport : Fragment() {
     private val coronaReportAppModel: CoronaReportAppModel by activityViewModels()
 
@@ -36,7 +31,7 @@ class NewReport : Fragment() {
     var time: LocalTime = LocalTime.now()
 
     private lateinit var binding: FragmentNewReportBinding
-    private var idUnique: Boolean = true;
+    private var idUnique: Boolean = false;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -48,16 +43,12 @@ class NewReport : Fragment() {
         this.binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_new_report, container, false
         )
-
+        setListener()
         binding.etDatePicker.inputType = 0
         binding.etTimePicker.inputType = 0
-
         val offices = resources.getStringArray(R.array.offices)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, offices)
         binding.dropdownPlace.setAdapter(arrayAdapter)
-
-        setListener()
-
 
         binding.etDatePicker.setOnClickListener { view ->
             showDatePickerDialog(view)
@@ -129,18 +120,21 @@ class NewReport : Fragment() {
 
     private fun setListener() {
         binding.btSave.setOnClickListener {
+            Logger.getLogger("noo")
+                .warning("listener set!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             coronaReportAppModel.reportList.value?.forEach {
                 if (binding.etInputId.text.toString() == it.id) {
                     idUnique = false
                     binding.etInputId.text.clear()
-                 } else if (binding.etInputId.text.toString() == "") {
+                } else if (binding.etInputId.text.toString() == "") {
+                    idUnique = false
+                } else if (binding.etInputId.text.toString().length < 6) {
                     idUnique = false
                 }
             }
             if (idUnique) {
                 validate(it)
-            }
-            else {
+            } else {
                 idUnique = true
                 setListener()
                 Logger.getLogger("warnung").warning("id entweder nicht eindeutig oder leer")
