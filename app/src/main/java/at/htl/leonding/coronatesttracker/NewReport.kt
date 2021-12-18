@@ -18,7 +18,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
-import java.util.logging.Logger
 
 
 class NewReport : Fragment() {
@@ -31,7 +30,10 @@ class NewReport : Fragment() {
     var time: LocalTime = LocalTime.now()
 
     private lateinit var binding: FragmentNewReportBinding
-    private var idUnique: Boolean = false;
+    private var idValid: Boolean = true;
+    private var idUnique: Boolean = true;
+    var testString: String = "";
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -43,7 +45,7 @@ class NewReport : Fragment() {
         this.binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_new_report, container, false
         )
-        setListener()
+
         binding.etDatePicker.inputType = 0
         binding.etTimePicker.inputType = 0
         val offices = resources.getStringArray(R.array.offices)
@@ -58,6 +60,9 @@ class NewReport : Fragment() {
             showTimePickerDialog(view)
         }
 
+        binding.btSave.setOnClickListener { view ->
+            validate(view)
+        }
         return binding.root;
 
     }
@@ -114,33 +119,39 @@ class NewReport : Fragment() {
             binding.dropdownPlace.text.toString()
         )
         coronaReportAppModel.addReport(report)
-        view?.findNavController()?.navigate(R.id.action_newReport_to_reportList)
-
-    }
-
-    private fun setListener() {
-        binding.btSave.setOnClickListener {
-            Logger.getLogger("noo")
-                .warning("listener set!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            coronaReportAppModel.reportList.value?.forEach {
-                if (binding.etInputId.text.toString() == it.id) {
-                    idUnique = false
-                    binding.etInputId.text.clear()
-                } else if (binding.etInputId.text.toString() == "") {
-                    idUnique = false
-                } else if (binding.etInputId.text.toString().length < 6) {
-                    idUnique = false
+        if (binding.etInputId.text.toString() == "") {
+            idValid = false
+            coronaReportAppModel.removeReport(report)
+            binding.etInputId.text.clear()
+        } else if (binding.etInputId.text.toString().length < 6) {
+            binding.etInputId.text.clear()
+            idValid = false
+            coronaReportAppModel.removeReport(report)
+        }
+        coronaReportAppModel.removeReport(report)
+        if (idValid) {
+            if (coronaReportAppModel.reportList.value!!.isEmpty()) {
+                coronaReportAppModel.addReport(report)
+                view?.findNavController()?.navigate(R.id.action_newReport_to_reportList)
+            } else {
+                coronaReportAppModel.reportList.value!!.forEach {
+                    if (binding.etInputId.text.toString() == it.id) {
+                        binding.etInputId.text.clear()
+                        idValid = false
+                        idUnique = false
+                        coronaReportAppModel.removeReport(it)
+                    } else {
+                        idValid = true
+                        idUnique = true
+                        coronaReportAppModel.addReport(report)
+                        view?.findNavController()?.navigate(R.id.action_newReport_to_reportList)
+                    }
                 }
             }
-            if (idUnique) {
-                validate(it)
-            } else {
-                idUnique = true
-                setListener()
-                Logger.getLogger("warnung").warning("id entweder nicht eindeutig oder leer")
-            }
         }
+
     }
+
 }
 
 

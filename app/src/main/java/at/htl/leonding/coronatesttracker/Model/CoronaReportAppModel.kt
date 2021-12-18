@@ -23,4 +23,12 @@ class CoronaReportAppModel : ViewModel() {
         teststring = reportList.value.toString()
     }
 
+    public fun removeReport(report: Report){
+        _reportList.value?.forEach { it ->
+            if (report.id == it.id){
+                _reportList.value?.remove(report)
+            }
+        }
+    }
+
 }
